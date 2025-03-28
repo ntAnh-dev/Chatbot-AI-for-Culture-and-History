@@ -2,6 +2,7 @@
 import os
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request
+from flask_cors import CORS 
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_pinecone import PineconeVectorStore
 from langchain.chains import create_retrieval_chain
@@ -13,7 +14,7 @@ from src.helper import download_hugging_face_embeddings
 
 
 app = Flask(__name__)
-
+CORS(app)
 load_dotenv()
 
 PINECONE_API_KEY = os.environ.get('PINECONE_API_KEY')
