@@ -13,7 +13,7 @@ Project repo: https://github.com/
 ### STEP 01: Create a conda environment after opening the repository
 
 ```bash
-conda create -n llmapp -y
+conda create -n llmapp python=3.12 -y
 ```
 
 ```bash
@@ -23,5 +23,5 @@ conda activate llmapp
 
 ### STEP 02: Install the requirements
 ```bash
-pip install -r requrirements.txt
+pip install -r requirements.txt
 ```
