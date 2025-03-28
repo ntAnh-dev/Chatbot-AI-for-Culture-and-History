@@ -7,7 +7,7 @@ from langchain_pinecone import PineconeVectorStore
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
-from src.prompt import system_prompts
+from src.prompt import system_prompt
 
 from src.helper import download_hugging_face_embeddings
 
@@ -31,7 +31,7 @@ docsearch_384 = PineconeVectorStore.from_existing_index(
     embedding=embeddings_384
 )
 
-retriever_384 = docsearch_384.as_retriever(search_type="similarity", search_kwargs={"k":3})
+retriever_384 = docsearch_384.as_retriever(search_type="similarity", search_kwargs={"k":10})
 
 llm = ChatGoogleGenerativeAI(
     model="gemini-1.5-pro",
@@ -44,7 +44,7 @@ llm = ChatGoogleGenerativeAI(
 
 prompt = ChatPromptTemplate.from_messages(
     [
-        ("system", system_prompts),
+        ("system", system_prompt),
         ("human", "{input}"),
     ]
 )
@@ -52,15 +52,15 @@ prompt = ChatPromptTemplate.from_messages(
 question_answer_chain = create_stuff_documents_chain(llm, prompt)
 rag_chain = create_retrieval_chain(retriever_384, question_answer_chain)
 
-app.route('/question', methods=['POST'])
+@app.route('/question', methods=['POST'])
 def answer_question():
     data = request.get_json()
     if not data or 'question' not in data:
         return jsonify({"error": "Missing 'question' in request body"}), 400
     
     question = data['question']
-    answer = rag_chain.invoke({"input": question})
-    return jsonify({"answer": answer})
+    response = rag_chain.invoke({"input": question})
+    return jsonify({"answer": response["answer"]})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=8000, debug=True)
