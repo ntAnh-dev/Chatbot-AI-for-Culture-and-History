@@ -9,7 +9,6 @@ from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
 from src.prompt import system_prompt
-from src.InferenceProvider.cerebras import cerebrasProvider
 from src.huggingface import models, getOutput
 
 from src.helper import download_hugging_face_embeddings
