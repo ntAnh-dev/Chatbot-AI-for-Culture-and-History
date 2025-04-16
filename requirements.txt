@@ -10,4 +10,9 @@ langchain_openai
 langchain_experimental
 langchain_google_genai
 flask_cors
+transformers
+torch
+numpy
+accelerate
+huggingface_hub
 -e .
