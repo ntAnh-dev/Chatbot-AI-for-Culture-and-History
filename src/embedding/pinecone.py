@@ -1,0 +1,28 @@
+import os
+from src.helper import download_hugging_face_embeddings
+from langchain_pinecone import PineconeVectorStore
+from langchain.retrievers import EnsembleRetriever
+
+PINECONE_API_KEY = os.environ.get('PINECONE_API_KEY')
+os.environ["PINECONE_API_KEY"] = PINECONE_API_KEY
+
+embedding = download_hugging_face_embeddings("BAAI/bge-m3")
+
+documents_index_name = "chatbot-documents"
+entities_index_name = "entities-data"
+
+document_docsearch = PineconeVectorStore.from_existing_index(
+  index_name=documents_index_name,
+  embedding=embedding
+)
+
+# entity_docsearch = PineconeVectorStore.from_existing_index(
+#   index_name=entities_index_name,
+#   embedding=embedding
+# )
+
+document_retriever = document_docsearch.as_retriever(search_type="mmr", search_kwargs={"k": 5})
+
+# entity_retriever = entity_docsearch.as_retriever(search_type="mmr", search_kwargs={"k": 5})
+
+# combined_retriever = EnsembleRetriever(retrievers=[document_retriever, entity_retriever])
