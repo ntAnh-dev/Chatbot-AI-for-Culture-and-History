@@ -15,7 +15,7 @@ from src.helper import download_hugging_face_embeddings
 
 # app = Flask(__name__)
 # CORS(app)
-# load_dotenv()
+load_dotenv()
 
 # PINECONE_API_KEY = os.environ.get('PINECONE_API_KEY')
 # GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
