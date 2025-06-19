@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from src.embedding.pinecone import document_docsearch
+from src.embedding.pinecone import document_docsearch, document_docsearch_v2
 from src.chatbot.chain import answer_gen_rag_chain, question_gen_rag_chain
 from src.prompt.gemini_prompt import build_prompt
 from src.genimi.llm import llm
@@ -18,21 +18,34 @@ def answer_question():
     question = data['question']
     extra = data['extra']
     full_question = question
+    entities = []
     if extra and len(extra) > 0:
         query = build_prompt(text=extra, question=question)
         response = llm.invoke(query)
-        full_question = response.content
-    top_5_similarity = document_docsearch.similarity_search_with_relevance_scores(full_question, k = 5)
+        contents = response.content.split("\n")
+        full_question = contents[0]
+        entities = contents[1:]
+
+    top_3_similarity = document_docsearch.similarity_search_with_relevance_scores(full_question, k = 3)
+    top_3_similarity_v2 = document_docsearch_v2.similarity_search_with_relevance_scores(full_question, k = 3)
     min_rel = 1
     min_accept = 0.75
-    # for doc in top_5_similarity:
+
     sources = []
-    for doc in top_5_similarity:
+    for doc in top_3_similarity_v2 + top_3_similarity:
         if int(doc[-1]) < min_accept: min_rel = doc[-1]
         source_url = doc[0].metadata["source"] if "source" in doc[0].metadata else None
         if source_url: sources.append(source_url)
+
+    extra_context = ""
+    for entity in entities:
+        top_3_similarity = document_docsearch.similarity_search_with_relevance_scores(entity, k = 3)
+        for doc in top_3_similarity:
+            if int(doc[-1]) >= min_accept:
+                extra_context += doc[0].page_content + '\n'
+
     if min_rel >= min_accept:
-        response = answer_gen_rag_chain.invoke({ "input": full_question })
+        response = answer_gen_rag_chain.invoke({ "input": extra_context + full_question })
         answer = json.loads(response['answer'][8:-4])
         if "extra_questions" in answer and isinstance(answer["extra_questions"], list):
             answer["extra_questions"].extend(sources)
@@ -46,13 +59,5 @@ def answer_question():
             "answer": "Bạn vui lòng hãy làm rõ câu hỏi của bạn muốn hỏi hơn, có vẻ chúng tôi không tìm thấy các tài liệu liên quan đến câu hỏi của bạn.",
             "extra_questions": answer
         }
-
-    # if 'model' not in data:
-    #     response = rag_chain.invoke({"input": question})
-    #     return jsonify({"answer": response["answer"]})
-
-    # checking similarity
-    # < 0.7: gen ques
-    # >= 0.7: gen answer
-
-    # return jsonify({"answer": response.content})
+    
+        # TODO: adding step search google

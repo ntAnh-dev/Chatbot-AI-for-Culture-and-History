@@ -12,9 +12,15 @@ os.environ["PINECONE_API_KEY"] = PINECONE_API_KEY
 embedding = download_hugging_face_embeddings("BAAI/bge-m3")
 
 documents_index_name = "chatbot-documents"
+documents_index_name_v2 = "chatbot-documents-v2"
 entities_index_name = "entities-data"
 
 document_docsearch = PineconeVectorStore.from_existing_index(
+  index_name=documents_index_name,
+  embedding=embedding
+)
+
+document_docsearch_v2 = PineconeVectorStore.from_existing_index(
   index_name=documents_index_name,
   embedding=embedding
 )
@@ -24,8 +30,10 @@ document_docsearch = PineconeVectorStore.from_existing_index(
 #   embedding=embedding
 # )
 
-document_retriever = document_docsearch.as_retriever(search_type="mmr", search_kwargs={"k": 5})
+document_retriever = document_docsearch.as_retriever(search_type="mmr", search_kwargs={"k": 3})
+
+document_retriever_v2 = document_docsearch_v2.as_retriever(search_type="mmr", search_kwargs={"k": 3})
 
 # entity_retriever = entity_docsearch.as_retriever(search_type="mmr", search_kwargs={"k": 5})
 
-# combined_retriever = EnsembleRetriever(retrievers=[document_retriever, entity_retriever])
+combined_retriever = EnsembleRetriever(retrievers=[document_retriever_v2, document_retriever])

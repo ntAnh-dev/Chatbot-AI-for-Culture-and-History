@@ -15,13 +15,14 @@ extra_questions_gen_prompt = (
 )
 
 def build_prompt(text, question):
-  prompt = f"""Bạn sẽ được cung cấp một đoạn văn bản và một câu hỏi bằng tiếng Việt. Nếu câu hỏi quá trừu tượng, không rõ ràng hoặc không có đủ thông tin để trả lời chính xác, bạn cần làm rõ câu hỏi đó bằng cách suy đoán hợp lý dựa trên nội dung của đoạn văn bản, nhằm biến câu hỏi trở nên cụ thể và đầy đủ hơn.
+  prompt = f"""Bạn sẽ được cung cấp một đoạn văn bản và một câu hỏi bằng tiếng Việt. Nếu câu hỏi quá trừu tượng, không rõ ràng hoặc không có đủ thông tin để trả lời chính xác, bạn cần làm rõ câu hỏi đó bằng cách suy đoán hợp lý dựa trên nội dung của đoạn văn bản, nhằm biến câu hỏi trở nên cụ thể và đầy đủ hơn. Song song với việc làm rõ câu hỏi, hãy tìm kiếm các thực thể ĐÌNH, ĐỀN, CHÙA, ANH HÙNG, THẦN THÁNH có trong đoạn văn bản.
 
   ### Yêu cầu:
   - Giữ nguyên ý định ban đầu của người hỏi nếu có thể nhận ra.
   - Bổ sung thêm thông tin, ngữ cảnh hoặc chi tiết dựa trên văn bản cho trước nếu cần thiết.
   - Nếu có nhiều cách hiểu, hãy chọn cách hiểu hợp lý nhất dựa trên đoạn văn bản.
-  - Chỉ trả về một câu hỏi đã được làm rõ dưới dạng tiếng Việt hoàn chỉnh, không giải thích gì thêm.
+  - Dòng đầu tiên trả về một câu hỏi đã được làm rõ dưới dạng tiếng Việt hoàn chỉnh, không giải thích gì thêm.
+  - Các dòng tiếp theo MỖI DÒNG CHỈ TRẢ VỀ TÊN MỘT THỰC THỂ được phân tách ra, TỐI ĐA 2 thực thể có ảnh hưởng lớn nhất đến ngữ nghĩa của câu hỏi.
 
   ---
   Đoạn văn bản:
