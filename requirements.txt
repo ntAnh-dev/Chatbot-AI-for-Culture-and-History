@@ -15,4 +15,5 @@ torch
 numpy
 accelerate
 huggingface_hub
+streamlit
 -e .
