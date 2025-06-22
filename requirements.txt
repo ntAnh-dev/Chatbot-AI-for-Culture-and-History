@@ -16,4 +16,7 @@ numpy
 accelerate
 huggingface_hub
 streamlit
+googlesearch-python
+newspaper3k
+lxml[html_clean]
 -e .

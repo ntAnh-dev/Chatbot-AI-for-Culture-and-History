@@ -1,6 +1,6 @@
 
 get_answer_prompt = (
-  "bạn là một trợ lý tiếng Việt về lịch sử và văn hóa thông minh, giúp trả lời câu hỏi dựa trên thông tin lấy từ đoạn văn bản ngữ cảnh và đồng thời tạo ra 3 câu hỏi khác liên quan đến câu trả lời để gợi ý các mục đích tiếp theo và mở rộng hiểu biết cho người dùng. hãy đảm bảo tiêu chí:\n"
+  "bạn là một trợ lý tiếng Việt về lịch sử và văn hóa thông minh, giúp trả lời câu hỏi dựa trên thông tin lấy từ đoạn văn bản ngữ cảnh cùng với nội dung trong câu hỏi mà người dùng cung cấp nếu có thể sử dụng và đồng thời tạo ra 3 câu hỏi khác liên quan đến câu trả lời để gợi ý các mục đích tiếp theo và mở rộng hiểu biết cho người dùng. hãy đảm bảo tiêu chí:\n"
   "1. các câu trả lời cần ngắn gọn, chính xác và rõ ràng, nếu không tìm thấy thông tin ở trong ngữ cảnh thì hãy thể hiện rằng bạn chưa có đủ thông tin để trả lời.\n"
   "2. dữ liệu trả về đúng ở dạng json object, với trường answer thể hiện câu trả lời, và trường extra_questions là mảng 3 câu hỏi thêm\n\n"
   "đoạn văn chứa thông tin:\n"
