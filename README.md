@@ -26,7 +26,7 @@ conda activate chatbot
 pip install -r requirements.txt
 ```
 
-### Run the app
+# Run the app
 ## For API
 ```bash
 python app.py
