@@ -25,3 +25,14 @@ conda activate chatbot
 ```bash
 pip install -r requirements.txt
 ```
+
+### Run the app
+## For API
+```bash
+python app.py
+```
+
+## For Chatbot only
+```bash
+streamlit run chat.py
+```
